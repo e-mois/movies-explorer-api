@@ -1,7 +1,9 @@
+const STATUS_CODE = require('../utils/errorCode');
+
 class NotAuthError extends Error {
   constructor(message) {
     super(message);
-    this.statusCode = 401;
+    this.statusCode = STATUS_CODE.noAuth;
     this.name = this.constructor.name;
   }
 }

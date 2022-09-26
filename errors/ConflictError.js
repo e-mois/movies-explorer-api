@@ -1,7 +1,9 @@
+const STATUS_CODE = require('../utils/errorCode');
+
 class ConflictError extends Error {
   constructor(message) {
     super(message);
-    this.statusCode = 409;
+    this.statusCode = STATUS_CODE.conflictError;
     this.name = this.constructor.name;
   }
 }

@@ -1,7 +1,9 @@
+const STATUS_CODE = require('../utils/errorCode');
+
 class NotFound extends Error {
   constructor(message = 'Искомый объект не найден') {
     super(message);
-    this.statusCode = 404;
+    this.statusCode = STATUS_CODE.notFound;
     this.name = this.constructor.name;
   }
 }

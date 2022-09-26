@@ -1,26 +1,27 @@
 const { celebrate, Joi } = require('celebrate');
+const validator = require('validator');
 
 const createUserValidator = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email({ tlds: { allow: false } }),
     password: Joi.string().required(),
   }),
-})
+});
 
 const loginValidator = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email({ tlds: { allow: false } }),
     password: Joi.string().required(),
   }),
-})
+});
 
 const updateUserValidator = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email({ tlds: { allow: false } }),
   }),
-})
+});
 
 const createMovieValidator = celebrate({
   body: Joi.object().keys({
@@ -29,22 +30,40 @@ const createMovieValidator = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required()
-      .regex(/https?:\/\/(\w{3}\.)?[1-9a-z\-.]{1,}\.\w{2,}(\/[1-90a-z.,_@%&?+=~/-]{1,}\/?)?#?/i),
-    trailerLink: Joi.string().required()
-      .regex(/https?:\/\/(\w{3}\.)?[1-9a-z\-.]{1,}\.\w{2,}(\/[1-90a-z.,_@%&?+=~/-]{1,}\/?)?#?/i),
+    image: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Поле image заполнено некорректно');
+    }),
+    trailerLink: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Поле trailerLink заполнено некорректно');
+    }),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    thumbnail: Joi.string().required()
-    .regex(/https?:\/\/(\w{3}\.)?[1-9a-z\-.]{1,}\.\w{2,}(\/[1-90a-z.,_@%&?+=~/-]{1,}\/?)?#?/i),
+    thumbnail: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Поле thumbnail заполнено некорректно');
+    }),
     movieId: Joi.number().required(),
   }),
-})
+});
 
 const deleteMoviesValidator = celebrate({
   params: Joi.object().keys({
     movieId: Joi.string().hex().length(24),
   }),
-})
+});
 
-module.exports = { createUserValidator, loginValidator, updateUserValidator, createMovieValidator, deleteMoviesValidator }
+module.exports = {
+  createUserValidator,
+  loginValidator,
+  updateUserValidator,
+  createMovieValidator,
+  deleteMoviesValidator,
+};

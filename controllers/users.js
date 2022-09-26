@@ -4,6 +4,7 @@ const User = require('../models/user');
 const NotFound = require('../errors/NotFound');
 const CastomizeError = require('../errors/CastomizeError');
 const ConflictError = require('../errors/ConflictError');
+const { JWT_SECRET_DEV } = require('../utils/devConstants');
 
 const createUser = (req, res, next) => {
   const {
@@ -44,7 +45,7 @@ const login = (req, res, next) => {
       if (!user) {
         next(new NotFound());
       }
-      const token = jwt.sign({ _id: user._id }, process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'secret-code', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : JWT_SECRET_DEV, { expiresIn: '7d' });
       res
         .cookie('access_token', token, {
           secure: process.env.NODE_ENV === 'production',
@@ -59,7 +60,7 @@ const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        next(new NotFound());
+        return next(new NotFound());
       }
       return res.send(user);
     })
@@ -86,10 +87,14 @@ const updateUser = (req, res, next) => {
     .catch((error) => {
       if (error.name === 'ValidationError' || error.name === 'CastError') {
         next(new CastomizeError('Данные некорректны'));
+      } else if (error.code === 11000) {
+        next(new ConflictError(`Пользователь с email ${email} уже существует!`));
       } else {
         next(error);
       }
     });
 };
 
-module.exports = { createUser, login, getCurrentUser, updateUser }
+module.exports = {
+  createUser, login, getCurrentUser, updateUser,
+};

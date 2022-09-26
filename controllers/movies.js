@@ -12,8 +12,34 @@ const getMovies = (req, res, next) => {
 };
 
 const createMovie = (req, res, next) => {
-  const { country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId, owner = req.user._id } = req.body;
-  Movie.create({ country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId, owner })
+  const {
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
+    owner = req.user._id,
+  } = req.body;
+  Movie.create({
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
+    owner,
+  })
     .then((movie) => {
       res.send(movie);
     })
@@ -43,4 +69,4 @@ const deleteMovie = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getMovies, createMovie, deleteMovie }
+module.exports = { getMovies, createMovie, deleteMovie };
