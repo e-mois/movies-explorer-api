@@ -1,6 +1,6 @@
 const allowedCors = [
-  'https://emoiseev.mesto.nomoredomains.sbs',
-  'http://emoiseev.mesto.nomoredomains.sbs',
+  'https://emoiseev.diploma.nomorepartiesxyz.ru/',
+  'http://emoiseev.diploma.nomorepartiesxyz.ru/',
   'http://localhost:3000',
 ];
 
