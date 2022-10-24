@@ -8,7 +8,7 @@ const movieRouter = require('./routes/movieRoutes');
 const { auth } = require('./middlewares/auth');
 const getErrorMessage = require('./middlewares/getErrorMessage');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const corsMW = require('./middlewares/cors');
+const cors = require('./middlewares/cors');
 const NotFound = require('./errors/NotFound');
 const authRouter = require('./routes');
 const { BASE_URL_DEV } = require('./utils/devConstants');
@@ -25,7 +25,7 @@ app.use(requestLogger);
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(corsMW);
+app.use(cors);
 
 app.use(authRouter);
 app.use(auth);
