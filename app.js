@@ -35,9 +35,13 @@ app.use(authRouter);
 app.use(auth);
 app.use(userRouter);
 app.use(movieRouter);
+app.get('/signout', (req, res) => {
+  res.clearCookie('access_token').send({ message: 'Выход' });
+});
 app.use('*', (res, req, next) => {
   next(new NotFound('Страница не найдена'));
 });
+
 app.use(errorLogger);
 
 app.use(errors());

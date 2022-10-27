@@ -4,7 +4,7 @@ const CastomizeError = require('../errors/CastomizeError');
 const Forbidden = require('../errors/Forbidden');
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((movies) => {
       res.send(movies);
     })
